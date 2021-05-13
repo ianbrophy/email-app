@@ -39,6 +39,7 @@ passport.use(
       // existingUser will be a mongo record (mongoose model instance) if found
       // or null if not found
       // call 'done()' once the desired logic is complete
+
       User.findOne({ googleId: profile.id }).then((existingUser) => {
         if (existingUser) {
           //user found
