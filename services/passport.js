@@ -30,35 +30,65 @@ passport.use(
       callbackURL: "/auth/google/callback",
       proxy: true,
     },
-    (accessToken, refreshToken, profile, done) => {
-      //       console.log("accessToken: ", accessToken)
-      //       console.log("refreshToken: ", refreshToken)
-      //       console.log("acceprofilessToken: ", profile)
+    // (accessToken, refreshToken, profile, done) => {
+    //       console.log("accessToken: ", accessToken)
+    //       console.log("refreshToken: ", refreshToken)
+    //       console.log("acceprofilessToken: ", profile)
 
-      //check for the user in the collection
-      // existingUser will be a mongo record (mongoose model instance) if found
-      // or null if not found
-      // call 'done()' once the desired logic is complete
+    //check for the user in the collection
+    // existingUser will be a mongo record (mongoose model instance) if found
+    // or null if not found
+    // call 'done()' once the desired logic is complete
 
-      User.findOne({ googleId: profile.id }).then((existingUser) => {
-        if (existingUser) {
-          //user found
-          // call done(a,b)
-          //a = an error object
-          //b = user record
-          done(null, existingUser)
-        } else {
-          //not found, make a new one
-          //add the user
-          new User({
-            googleId: profile.id,
-          })
-            .save()
-            .then((user) => {
-              done(null, profile.id)
-            })
-        }
-      })
+    ////with .then promises
+    // User.findOne({ googleId: profile.id }).then((existingUser) => {
+    //   if (existingUser) {
+    //     //user found
+    //     // call done(a,b)
+    //     //a = an error object
+    //     //b = user record
+    //     done(null, existingUser)
+    //   } else {
+    //     //not found, make a new one
+    //     //add the user
+    //     new User({
+    //       googleId: profile.id,
+    //     })
+    //       .save()
+    //       .then((user) => {
+    //         done(null, profile.id)
+    //       })
+    //   }
+    // }
+
+    // //with async await
+    // async (accessToken, refreshToken, profile, done) => {
+    //   const existingUser = await User.findOne({ googleId: profile.id })
+    //   if (existingUser) {
+    //     //user found
+    //     // call done(a,b)
+    //     //a = an error object
+    //     //b = user record
+    //     done(null, existingUser)
+    //   } else {
+    //     //not found, make a new one
+    //     //add the user
+    //     const user = await new User({
+    //       googleId: profile.id,
+    //     }).save()
+    //     done(null, profile.id)
+    //   }
+    // }
+    //with async await, with return inside 'if' instead of using 'else', and no comments
+    async (accessToken, refreshToken, profile, done) => {
+      const existingUser = await User.findOne({ googleId: profile.id })
+      if (existingUser) {
+        return done(null, existingUser)
+      }
+      const user = await new User({
+        googleId: profile.id,
+      }).save()
+      done(null, profile.id)
     }
   )
 )

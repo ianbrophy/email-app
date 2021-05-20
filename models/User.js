@@ -7,6 +7,7 @@ const { Schema } = mongoose
 //add more props at any time without issue
 const userSchema = new Schema({
   googleId: String,
+  credits: { type: Number, default: 0 },
 })
 
 //create a model with a 'name' and schema

@@ -16,9 +16,14 @@ module.exports = (app) => {
   )
 
   //return from google
-  // since there are no additional arguments (ie 'scope'), passport will not do a redirect but will make an
-  //    exchange for the user profile
-  app.get("/auth/google/callback", passport.authenticate("google"))
+  // since there are no additional arguments (ie 'scope'),
+  //    passport will not do a redirect but will make an exchange for the user profile
+  // app.get("/auth/google/callback", passport.authenticate("google"))
+
+  //add another handler with res/req inside the chain
+  app.get("/auth/google/callback", passport.authenticate("google"), (req, res) => {
+    res.redirect("/surveys")
+  })
 
   // this goes through the cookie check flow
   // if the user has cookie data this route should show the data
@@ -34,8 +39,6 @@ module.exports = (app) => {
     //kill the cookie
     req.logout()
 
-    //prove that the user is no longer signed in
-    //this should show a blank screen for now
-    res.send(req.user)
+    res.redirect("/")
   })
 }
