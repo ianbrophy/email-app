@@ -22,10 +22,10 @@ mongoose.connect(keys.mongoURI, {
 const app = express()
 
 //use body-parser
-app.use(bodyParser.json())
+//app.use(bodyParser.json())
 
 //body-parser seems to be deprecated, so use this instead
-//app.use(express.json())
+app.use(express.json())
 
 //use cookies
 //30days in millisec
@@ -62,5 +62,4 @@ if (process.env.NODE_ENV === "production") {
   })
 }
 
-// app.listen(5000)
 app.listen(process.env.PORT || 5000)
